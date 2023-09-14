@@ -1,13 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import * as C from './Styles';
 import { MdDonutLarge } from 'react-icons/md';
 import { BsFillChatRightTextFill } from 'react-icons/bs';
 import { FiMoreVertical } from 'react-icons/fi';
+import { AiOutlineSearch } from 'react-icons/ai';
+import ChatlistItem from './components/ChatlistItem';
 
 
 function App() {
-    const [count, setCount] = useState(0)
+    const [chatlist, setChatlist] = useState([{},{},{},{}])
 
     return (
         <C.AppWindow>
@@ -27,11 +29,16 @@ function App() {
                     </C.HeaderButtons>
                 </header>
                 <C.Search>
-                    aa
+                    <C.SearchArea>
+                        <AiOutlineSearch fontSize="small" style={{color: '#919191'}}/>
+                        <C.SearchInput type="search" placeholder="Procurar ou começar uma nova conversa" />
+                    </C.SearchArea>
                 </C.Search>
 
                 <C.ChatList>
-                    bb
+                    {chatlist.map((item, key)=>(
+                        <ChatlistItem key={key}/>
+                    ))}
                 </C.ChatList>
             </C.Sidebar>
             <C.ContentArea>
