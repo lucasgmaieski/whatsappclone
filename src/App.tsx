@@ -6,11 +6,20 @@ import { BsFillChatRightTextFill } from 'react-icons/bs';
 import { FiMoreVertical } from 'react-icons/fi';
 import { AiOutlineSearch } from 'react-icons/ai';
 import ChatlistItem from './components/ChatlistItem';
+import ChatIntro from './components/ChatIntro';
+import ChatWindow from './components/ChatWindow';
 
 
 function App() {
-    const [chatlist, setChatlist] = useState([{},{},{},{}])
-
+    const [chatlist, setChatlist] = useState<ChatItemType[]>([
+        {chatId: 1, title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
+        {chatId: 2, title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
+        {chatId: 3, title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
+        {chatId: 4, title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
+        {chatId: 5, title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
+        {chatId: 6, title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'}
+    ])
+    const [activeChat, setActiveChat] = useState<ChatItemType | null>(null);
     return (
         <C.AppWindow>
             <C.Sidebar>
@@ -37,12 +46,20 @@ function App() {
 
                 <C.ChatList>
                     {chatlist.map((item, key)=>(
-                        <ChatlistItem key={key}/>
+                        <ChatlistItem 
+                            key={key}
+                            onClick={()=>setActiveChat(chatlist[key])}
+                        />
                     ))}
                 </C.ChatList>
             </C.Sidebar>
             <C.ContentArea>
-                conteudo
+                {activeChat?.chatId !== undefined &&
+                    <ChatWindow />
+                }
+                {activeChat?.chatId === undefined &&
+                    <ChatIntro />
+                }
             </C.ContentArea>
         </C.AppWindow>
     )

@@ -44,7 +44,17 @@ export const SearchInput = styled.input`
     margin-left: 10px;
 `;
 export const ChatList = styled.div`
+    flex: 1;
+    background-color: #fff;
+    overflow-y: auto;
 
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0,0,0, 0.2);
+    }
 `;
 export const HeaderAvatar = styled.img`
     width: 40px;
@@ -67,5 +77,5 @@ export const HeaderBtn = styled.div`
 
 
 export const ContentArea = styled.div`
-
+    flex: 1;
 `;
