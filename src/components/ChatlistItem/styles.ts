@@ -9,6 +9,10 @@ export const ChatListItem = styled.div`
     &:hover {
         background-color: #f5f5f5;
     }
+
+    &.active {
+        background-color: #ebebeb;
+    }
 `;
 export const ChatListAvatar = styled.img`
     width: 50px;

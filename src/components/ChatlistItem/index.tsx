@@ -3,14 +3,19 @@ import * as C from "./styles";
 type Props = {
     // onClick: () => React.Dispatch<React.SetStateAction<ChatItemType>>
     onClick: () => void;
+    active: boolean;
+    data: ChatItemType;
 }
-export default ({onClick}: Props) => {
+export default ({onClick, active, data}: Props) => {
     return (
-        <C.ChatListItem onClick={onClick}>
-            <C.ChatListAvatar src="./Avatar-Profile-Vector.png" alt="" />
+        <C.ChatListItem 
+            className={active ? 'active' : ''}
+            onClick={onClick}
+        >
+            <C.ChatListAvatar src={data.image} alt="" />
             <C.ChatListLines>
                 <C.ChatListLine>
-                    <C.ChatListName>Lucas Maieski</C.ChatListName>
+                    <C.ChatListName>{data.title}</C.ChatListName>
                     <C.ChatListDate>19:19</C.ChatListDate>
                 </C.ChatListLine>
                 <C.ChatListLine>

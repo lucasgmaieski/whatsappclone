@@ -1,32 +1,90 @@
 import styled from "styled-components";
 
-export const ChatIntro = styled.div`
-    background-color: #f8f9fa;
+export const ChatWindow = styled.div`
     display: flex;
     flex-direction: column;
+    height: 100%;
+`;
+export const ChatWindowHeader = styled.div`
+    height: 60px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
+export const ChatWindowHeaderInfo = styled.div`
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+`;
+export const ChatWindowAvatar = styled.img`
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 15px;
+    margin-right: 15px;
+`;
+export const ChatWindowName = styled.div`
+    font-size: 17px;
+    color: #fff;
+`;
+export const ChatWindowButtons = styled.div`
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+`;
+export const ChatWindowBtn = styled.div`
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    border-bottom: 1px solid #4adf83 ;
+    cursor: pointer;
+`;
+export const ChatWindowEmojiArea = styled.div`
+    em-emoji-picker {
+        --rgb-background: 262, 240, 283, .0;
+        width: 100%;
 
-    img {
-        width: 250px;
-        height: auto;
     }
-
-    h1 {
-        font-size: 32px;
-        color: #525252;
-        font-weight: normal;
-        margin-top: 30px;
-    }
-
-    h2 {
-        font-size: 14px;
-        color: #777;
-        font-weight: normal;
-        margin-top: 20px;
-        line-height: 20px;
-        text-align: center;
+    #root {
+        background-color: transparent;
     }
 `;
+export const ChatWindowBody = styled.div`
+    flex: 1;
+    overflow-y: auto;
+    background-color: #e5ddd5;
+    background-size: cover;
+    background-position: center;
+    background-image: url(https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png);
+`;
+export const ChatWindowFooter = styled.div`
+    height: 62px;
+    display: flex;
+    align-items: center;
+`;
+export const ChatWindowPre = styled.div`
+    display: flex;
+    margin: 0 15px;
+`;
+export const ChatWindowInputArea = styled.div`
+    flex: 1;
+`;
+export const ChatWindowInput = styled.input`
+    width: 100%;
+    height: 40px;
+    border: 0;
+    outline: 0;
+    background-color: #fff;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #4a4a4a;
+    padding-left: 15px;
+`;
+export const ChatWindowPos = styled.div`
+    display: flex;
+    margin: 0 15px;
+`;
+
