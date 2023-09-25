@@ -1,3 +1,4 @@
+import { MdOutlineEmojiEmotions } from "react-icons/md";
 import styled from "styled-components";
 
 export const ChatWindow = styled.div`
@@ -41,8 +42,17 @@ export const ChatWindowBtn = styled.div`
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    overflow: hidden;
+    transition: all ease .3s;
 `;
-export const ChatWindowEmojiArea = styled.div`
+export const ChatWindowBtnClose = styled(ChatWindowBtn)<{emojiopen: string}>`
+    /* ${ChatWindowBtn}; */
+    width: ${props=>props.emojiopen === 'true' ? '40px' : '0px'};
+`;
+export const ChatWindowEmojiArea = styled.div<{emojiopen: string}>`
+    height: ${props=>props.emojiopen === 'true' ? '200px' : '0px'};
+    overflow-y: hidden;
+    transition: all ease .3s;
     em-emoji-picker {
         --rgb-background: 262, 240, 283, .0;
         width: 100%;
@@ -52,6 +62,11 @@ export const ChatWindowEmojiArea = styled.div`
         background-color: transparent;
     }
 `;
+
+// export const StyledEmojiEmotions = styled(MdOutlineEmojiEmotions)<{emojiOpen : string}>`
+//     color: ${props=>props.$emojiOpen ? '#009688' :'#919191'};
+// `;
+
 export const ChatWindowBody = styled.div`
     flex: 1;
     overflow-y: auto;
@@ -59,6 +74,15 @@ export const ChatWindowBody = styled.div`
     background-size: cover;
     background-position: center;
     background-image: url(https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png);
+    padding: 20px 30px;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0,0,0, 0.2);
+    }
 `;
 export const ChatWindowFooter = styled.div`
     height: 62px;
