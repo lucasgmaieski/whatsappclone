@@ -6,7 +6,6 @@ type Props = {
     onReceive: any;
 }
 export const Login = ({onReceive}: Props) => {
-    const [profilePic, setProfilePic] = useState(null);
 
     const handleFacebokLogin = async () => {
         let resultFull = await Api.fbPopup();

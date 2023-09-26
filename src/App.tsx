@@ -10,19 +10,24 @@ import ChatIntro from './components/ChatIntro';
 import ChatWindow from './components/ChatWindow';
 import { NewChat } from './components/NewChat';
 import { Login } from './components/Login';
+import Api from './Api';
 
 
 function App() {
     const [chatlist, setChatlist] = useState<ChatItemType[]>([
-        {chatId: 1, title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
-        {chatId: 2, title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
-        {chatId: 3, title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
-        {chatId: 4, title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
-        {chatId: 5, title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
-        {chatId: 6, title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'}
+        {chatId: '1', title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
+        {chatId: '2', title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
+        {chatId: '3', title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
+        {chatId: '4', title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
+        {chatId: '5', title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'},
+        {chatId: '6', title: 'Fulano Detal', image: './Avatar-Profile-Vector.png'}
     ])
     const [activeChat, setActiveChat] = useState<ChatItemType | null>(null);
-    const [user, setUser] = useState<UserType | null>(null);
+    const [user, setUser] = useState<UserType | null>({
+        id: 'LrK8dEJsyVYIcnEhn17UZskr1tI2',
+        name: 'Maieski',
+        avatar: 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=6905397726190656&height=200&width=200&ext=1698276353&hash=AeTs60LGvUKLoz6yZMs'
+    });
     const [showNewChat, setShowNewChat] = useState(false);
 
     const handleNewChat = () => {
@@ -35,7 +40,9 @@ function App() {
             name: u.result.user.displayName,
             avatar: u.imageProfile
         }
-        //
+
+        await Api.addUser(newUser);
+
         setUser(newUser);
     }
     

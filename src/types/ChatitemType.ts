@@ -1,5 +1,5 @@
 type ChatItemType = {
-    chatId: number;
+    chatId: string;
     title: string;
     image: string;
 }

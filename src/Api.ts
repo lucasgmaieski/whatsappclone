@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, FacebookAuthProvider } from "firebase/auth";
-import { getFirestore } from 'firebase/firestore';
-
+import { getFirestore, setDoc, collection, doc, getDocs } from 'firebase/firestore';
 import { firebaseConfig } from "./firebaseConfig";
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -19,45 +18,61 @@ export default {
         try {
             const response = await fetch(`https://graph.facebook.com/${result.user.providerData[0].uid}/picture?type=large&access_token=${accessToken}`);
             if (response.ok) {
-              const imageProfile = response.url;
-              console.log('devolvendo imagem: ');
-              console.log(imageProfile)
-              resultFull.imageProfile = imageProfile;
-              resultFull.result = result;
+                const imageProfile = response.url;
+                console.log('devolvendo imagem: ');
+                console.log(imageProfile)
+                resultFull.imageProfile = imageProfile;
+                resultFull.result = result;
             } else {
-              console.error('Erro na requisição da imagem de perfil.');
+                console.error('Erro na requisição da imagem de perfil.');
             }
-          } catch (error) {
+        } catch (error) {
             console.error('Ocorreu um erro ao buscar a imagem de perfil:', error);
-          }
-      
-          return resultFull;
+        }
+    
+        return resultFull;
+    },
+    addUser: async (u: any) => {
+        if(u) {
+            console.log('ta entrando aqui -----' + u.id)
+            const userDocRef = doc(db, 'users', u.id);
+            const userData = { name: u.name, avatar: u.avatar};
+            try {
+                await setDoc(userDocRef, userData, { merge: true });
+            } catch (error) {
+                console.log('erro:' + error);
+            }
+        } else {
+            console.log('U esta indefinido');
+        }
+
+    },
+    getContactList: async (userId:any) => {
+        let list: any = [];
+
+        try {
+            const usersCollection = collection(db, 'users');
+            const usersSnapshot = await getDocs(usersCollection);
+        
+            const usersData = usersSnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            usersData.forEach((result: any) => {
+                if(result.id !== userId) {
+                    list.push({
+                        id: result.id,
+                        name: result.name,
+                        avatar: result.avatar
+                    })
+                }
+            })
+            // Agora você tem os dados dos usuários em usersData
+            console.log(usersData);
+            console.log(list);
+        } catch (error) {
+            console.error('Erro ao buscar usuários:', error);
+        }
+        return list;
     }
 }
-
-
-const app = initializeApp(firebaseConfig);
-
-// signInWithPopup(auth, provider)
-//   .then((result) => {
-//     // The signed-in user info.
-//     const user = result.user;
-
-//     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-//     const credential = FacebookAuthProvider.credentialFromResult(result);
-//     const accessToken = credential.accessToken;
-
-//     // IdP data available using getAdditionalUserInfo(result)
-//     // ...
-//   })
-//   .catch((error) => {
-//     // Handle Errors here.
-//     const errorCode = error.code;
-//     const errorMessage = error.message;
-//     // The email of the user's account used.
-//     const email = error.customData.email;
-//     // The AuthCredential type that was used.
-//     const credential = FacebookAuthProvider.credentialFromError(error);
-
-//     // ...
-//   });

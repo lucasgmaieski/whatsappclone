@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as C from "./styles"
 import { IoMdArrowRoundBack } from "react-icons/io";
+import Api from '../../Api';
 type Props = {
     user: UserType;
     chatlist: ChatItemType[];
@@ -8,13 +9,17 @@ type Props = {
     setShow: React.Dispatch<React.SetStateAction<boolean>>
 }
 export const NewChat = ({user, chatlist, show, setShow}: Props) => {
-    const [list, setList] = useState([
-        {id: 123, avatar: './Avatar-Profile-Vector.png', name: 'Lucas Maieski'},
-        {id: 123, avatar: './Avatar-Profile-Vector.png', name: 'Luan Maieski'},
-        {id: 123, avatar: './Avatar-Profile-Vector.png', name: 'Luis Maieski'},
-        {id: 123, avatar: './Avatar-Profile-Vector.png', name: 'Luana Maieski'}
-    ]);
+    const [list, setList] = useState([]);
 
+    useEffect(()=>{
+        const getList = async () => {
+            if(user !== null) {
+                let results = await Api.getContactList(user.id);
+                setList(results);
+            }
+        }
+        getList();
+    }, [user])
     const handleClose = () => {
         setShow(false);
     }
