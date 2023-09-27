@@ -9,7 +9,7 @@ type Props = {
     setShow: React.Dispatch<React.SetStateAction<boolean>>
 }
 export const NewChat = ({user, chatlist, show, setShow}: Props) => {
-    const [list, setList] = useState([]);
+    const [list, setList] = useState<UserType[]>([]);
 
     useEffect(()=>{
         const getList = async () => {
@@ -19,7 +19,14 @@ export const NewChat = ({user, chatlist, show, setShow}: Props) => {
             }
         }
         getList();
-    }, [user])
+    }, [user]);
+
+    const addNewChat = async (user2: UserType) => {
+        await Api.addNewChat(user, user2);
+
+        handleClose();
+    }
+
     const handleClose = () => {
         setShow(false);
     }
@@ -33,7 +40,7 @@ export const NewChat = ({user, chatlist, show, setShow}: Props) => {
             </C.NewChatHead>
             <C.NewChatList>
                 {list.map((item, key)=>(
-                    <C.NewChatItem key={key}>
+                    <C.NewChatItem key={key} onClick={()=>addNewChat(item)}>
                         <C.NewChatItemAvatar src={item.avatar} alt="" />
                         <C.NewChatItemName>{item.name}</C.NewChatItemName>
                     </C.NewChatItem>

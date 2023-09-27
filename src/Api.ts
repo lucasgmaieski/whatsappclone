@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, FacebookAuthProvider } from "firebase/auth";
-import { getFirestore, setDoc, collection, doc, getDocs } from 'firebase/firestore';
+import { getFirestore, setDoc, collection, doc, getDocs, addDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { firebaseConfig } from "./firebaseConfig";
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -74,5 +74,42 @@ export default {
             console.error('Erro ao buscar usuários:', error);
         }
         return list;
+    },
+    addNewChat: async (user:UserType, user2:UserType) => {
+        if(user && user2) {
+            try {
+                    const chatsCollection = collection(db, "chats");
+                    // Adicione o documento à coleção "chats"
+                    let newChat = await addDoc(chatsCollection, {
+                        messages: [],
+                        users: [user.id, user2.id]
+                    });
+
+                    const usuarioRef = doc(db, "users", user.id);
+                    // Atualize o array "chats" usando arrayUnion
+                    await updateDoc(usuarioRef, {
+                        chats: arrayUnion({
+                            chatId: newChat.id,
+                            title: user2.name,
+                            image: user2.avatar,
+                            with: user2.id
+                        }),
+                    });
+
+                    const usuario2Ref = doc(db, "users", user2.id);
+                    // Atualize o array "chats" usando arrayUnion
+                    await updateDoc(usuario2Ref, {
+                        chats: arrayUnion({
+                            chatId: newChat.id,
+                            title: user.name,
+                            image: user.avatar,
+                            with: user.id
+                        }),
+                    });
+                    
+            } catch (error) {
+                console.error('Erro ao buscar chats:', error);
+            }
+        }
     }
 }
