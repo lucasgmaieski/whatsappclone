@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, FacebookAuthProvider } from "firebase/auth";
-import { getFirestore, setDoc, collection, doc, getDocs, addDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { getFirestore, setDoc, collection, doc, getDocs, addDoc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
 import { firebaseConfig } from "./firebaseConfig";
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -47,7 +47,7 @@ export default {
         }
 
     },
-    getContactList: async (userId:any) => {
+    getContactList: async (userId:string) => {
         let list: any = [];
 
         try {
@@ -111,5 +111,42 @@ export default {
                 console.error('Erro ao buscar chats:', error);
             }
         }
+    },
+    onChatList: (userId: string, setChatlist: React.Dispatch<React.SetStateAction<ChatItemType[]>>) => {
+        const userDocRef = doc(db, 'users', userId);
+        return onSnapshot(userDocRef, (doc) => {
+            let data = doc.data();
+            if(data) {
+                if(data.chats) {
+                    setChatlist(data.chats);
+                }
+            }
+        });
+    },
+    onChatContent: (chatId: string, setList: React.Dispatch<React.SetStateAction<MessageItemType[]>>) => {
+        const chatDocRef = doc(db, 'chats', chatId);
+        return onSnapshot(chatDocRef, (doc) => {
+            let data = doc.data();
+            if(data) {
+                if(data.messages) {
+                    setList(data.messages);
+                }
+            }
+        });
+    },
+    sendMessage: (chatData: any, userId: string, type: string, body: string) => {
+        let now = new Date();
+
+        const usuarioRef = doc(db, "chats", chatData.chatId);
+        // Atualize o array "messages" usando arrayUnion
+        updateDoc(usuarioRef, {
+            messages: arrayUnion({
+                type,
+                author: userId,
+                body,
+                date: now
+            }),
+        });
     }
+
 }

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import * as C from "./styles";
 
 type Props = {
@@ -7,6 +8,19 @@ type Props = {
     data: ChatItemType;
 }
 export default ({onClick, active, data}: Props) => {
+    const [time, setTime] = useState('');
+
+    useEffect(()=> {
+        if(data.lastMessageDate > 0) {
+            let d  = new Date(data.lastMessageDate.seconds * 1000);
+            let hours = d.getHours();
+            let minutes = d.getMinutes();
+            let hoursString = hours < 10 ? '0'+hours : hours;
+            let minutesString = minutes < 10 ? '0'+minutes : minutes;
+            console.log(data.lastMessageDate)
+            setTime(`${hoursString}:${minutesString}`);
+        }
+    }, [data]);
     return (
         <C.ChatListItem 
             className={active ? 'active' : ''}
@@ -16,11 +30,11 @@ export default ({onClick, active, data}: Props) => {
             <C.ChatListLines>
                 <C.ChatListLine>
                     <C.ChatListName>{data.title}</C.ChatListName>
-                    <C.ChatListDate>19:19</C.ChatListDate>
+                    <C.ChatListDate>{time}</C.ChatListDate>
                 </C.ChatListLine>
                 <C.ChatListLine>
                     <C.ChatListLastMsg>
-                        <p>Opa, tudo bom? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae repellendus fugit blanditiis velit omnis magnam id ut? Omnis, quisquam recusandae asperiores obcaecati eius tempora, quas, facere saepe architecto aliquid pariatur.</p>
+                        <p>{data.lastMessage}</p>
                     </C.ChatListLastMsg>
                 </C.ChatListLine>
             </C.ChatListLines>

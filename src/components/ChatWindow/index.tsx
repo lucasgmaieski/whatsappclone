@@ -4,16 +4,17 @@ import { MdAttachFile, MdOutlineEmojiEmotions, MdClose, MdSend, MdOutlineMic } f
 import { FiMoreVertical } from 'react-icons/fi';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
-import { useState, ChangeEvent, useEffect, useRef } from "react";
+import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import 'regenerator-runtime/runtime';
 import { MessageItem } from "../MessageItem";
+import Api from "../../Api";
 
 type Props = {
-    user: UserType
+    user: UserType;
+    data: ChatItemType;
 }
-export default ({user}: Props) => {
-
+export default ({user, data}: Props) => {
     const {
         transcript,
         interimTranscript,
@@ -48,62 +49,8 @@ export default ({user}: Props) => {
 
     const [emojiOpen, setEmojiOpen] = useState(false);
     const [text, setText] = useState('');
-    const [list, setList] = useState<MessageItemType[]>([
-        {
-            author: 123,
-            body: 'Olá pessoal',
-            image: '',
-            date: '',
-        },
-        {
-            author: 123,
-            body: 'eai man',
-            image: '',
-            date: '',
-        },
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-        { author: 444, body: 'opaaa', image: '', date: '',},
-    ]);
-
+    const [list, setList] = useState<MessageItemType[]>([]);
+    const [users, setUsers] = useState([]);
 
     const handleEmojiClick = (e:any) => { setText(text + e.native) }
     const handleOpenEmoji = () => { setEmojiOpen(true); }
@@ -111,9 +58,25 @@ export default ({user}: Props) => {
     const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => { setText(e.target.value); }
     const body = useRef<HTMLInputElement>(null)
 
-    const handleSendClick = () => {
-        
+    const handleInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if(e.keyCode == 13) {
+            handleSendClick();
+        }
     }
+    
+    const handleSendClick = () => {
+        if(text !== '') {
+            Api.sendMessage(data, user.id, 'text', text);
+            setText('');
+            setEmojiOpen(false);
+        }
+    }
+
+    useEffect(() => {
+        setList([]);
+        let unsub = Api.onChatContent(data.chatId, setList);
+    }, [data.chatId]);
+
     useEffect(() => {
         if (body.current) {
           if (body.current.scrollHeight > body.current.offsetHeight) {
@@ -127,8 +90,8 @@ export default ({user}: Props) => {
         <C.ChatWindow>
             <C.ChatWindowHeader>
                 <C.ChatWindowHeaderInfo>
-                    <C.ChatWindowAvatar src="./Avatar-Profile-Vector.png" alt="" />
-                    <C.ChatWindowName> Lucas Maieski</C.ChatWindowName>
+                    <C.ChatWindowAvatar src={data.image} alt="Avatar do usuário" />
+                    <C.ChatWindowName>{data.title} {data.chatId}</C.ChatWindowName>
                 </C.ChatWindowHeaderInfo>
 
                 <C.ChatWindowButtons>
@@ -182,6 +145,7 @@ export default ({user}: Props) => {
                         placeholder="Digite uma mensagem"
                         value={text}
                         onChange={handleChangeInput}
+                        onKeyUp={handleInputKeyUp}
                     >
 
                     </C.ChatWindowInput>
