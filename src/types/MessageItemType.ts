@@ -1,6 +1,6 @@
 type MessageItemType = {
-    author: number;
+    author: string;
     body: string;
     image: string;
-    date: string;
+    date: any;
 }

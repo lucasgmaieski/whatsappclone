@@ -50,7 +50,7 @@ export default ({user, data}: Props) => {
     const [emojiOpen, setEmojiOpen] = useState(false);
     const [text, setText] = useState('');
     const [list, setList] = useState<MessageItemType[]>([]);
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState<UserType[]>([]);
 
     const handleEmojiClick = (e:any) => { setText(text + e.native) }
     const handleOpenEmoji = () => { setEmojiOpen(true); }
@@ -66,7 +66,7 @@ export default ({user, data}: Props) => {
     
     const handleSendClick = () => {
         if(text !== '') {
-            Api.sendMessage(data, user.id, 'text', text);
+            Api.sendMessage(data, user.id, 'text', text, users);
             setText('');
             setEmojiOpen(false);
         }
@@ -74,7 +74,7 @@ export default ({user, data}: Props) => {
 
     useEffect(() => {
         setList([]);
-        let unsub = Api.onChatContent(data.chatId, setList);
+        let unsub = Api.onChatContent(data.chatId, setList, setUsers);
     }, [data.chatId]);
 
     useEffect(() => {
@@ -91,7 +91,7 @@ export default ({user, data}: Props) => {
             <C.ChatWindowHeader>
                 <C.ChatWindowHeaderInfo>
                     <C.ChatWindowAvatar src={data.image} alt="Avatar do usuário" />
-                    <C.ChatWindowName>{data.title} {data.chatId}</C.ChatWindowName>
+                    <C.ChatWindowName>{data.title}</C.ChatWindowName>
                 </C.ChatWindowHeaderInfo>
 
                 <C.ChatWindowButtons>

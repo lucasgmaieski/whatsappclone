@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, FacebookAuthProvider } from "firebase/auth";
-import { getFirestore, setDoc, collection, doc, getDocs, addDoc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
+import { getFirestore, setDoc, collection, doc, getDocs, addDoc, updateDoc, arrayUnion, onSnapshot, getDoc } from 'firebase/firestore';
 import { firebaseConfig } from "./firebaseConfig";
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -123,18 +123,19 @@ export default {
             }
         });
     },
-    onChatContent: (chatId: string, setList: React.Dispatch<React.SetStateAction<MessageItemType[]>>) => {
+    onChatContent: (chatId: string, setList: React.Dispatch<React.SetStateAction<MessageItemType[]>>, setUsers: React.Dispatch<React.SetStateAction<UserType[]>> ) => {
         const chatDocRef = doc(db, 'chats', chatId);
         return onSnapshot(chatDocRef, (doc) => {
             let data = doc.data();
             if(data) {
                 if(data.messages) {
                     setList(data.messages);
+                    setUsers(data.users);
                 }
             }
         });
     },
-    sendMessage: (chatData: any, userId: string, type: string, body: string) => {
+    sendMessage: async (chatData: any, userId: string, type: string, body: string, users: any) => {
         let now = new Date();
 
         const usuarioRef = doc(db, "chats", chatData.chatId);
@@ -147,6 +148,28 @@ export default {
                 date: now
             }),
         });
+
+        for(let i in users) {
+            const docRef = doc(db, "users", users[i]);
+            let docSnap = await getDoc(docRef);
+            let uData = docSnap.data();
+            if(uData) {
+                if (uData.chats) {
+                    let chats = [...uData.chats];
+
+                    for (let e in chats) {
+                        if (chats[e].chatId == chatData.chatId) {
+                            chats[e].lastMessage = body;
+                            chats[e].lastMessageDate = now;
+                        }
+                    }
+
+                    await updateDoc(docRef, {
+                        chats
+                    });
+                }
+            }
+        }
     }
 
 }
