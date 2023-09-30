@@ -50,7 +50,6 @@ function App() {
         <C.AppWindow>
             <C.Sidebar>
                 <NewChat 
-                    chatlist={chatlist}
                     user={user} 
                     show={showNewChat} 
                     setShow={setShowNewChat}

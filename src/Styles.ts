@@ -22,7 +22,6 @@ export const Sidebar = styled.aside`
     }
 `;
 
-
 export const Search = styled.div`
     background-color: #f6f6f6;
     border-bottom: 1px solid #eee;

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import * as C from "./styles";
 
 type Props = {
-    // onClick: () => React.Dispatch<React.SetStateAction<ChatItemType>>
     onClick: () => void;
     active: boolean;
     data: ChatItemType;

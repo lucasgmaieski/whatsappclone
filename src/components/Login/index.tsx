@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Api from '../../Api';
 import * as C from './styles';
 

@@ -2,7 +2,6 @@ import * as C from "./styles";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { MdAttachFile, MdOutlineEmojiEmotions, MdClose, MdSend, MdOutlineMic } from "react-icons/md";
 import { FiMoreVertical } from 'react-icons/fi';
-import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
@@ -74,7 +73,7 @@ export default ({user, data}: Props) => {
 
     useEffect(() => {
         setList([]);
-        let unsub = Api.onChatContent(data.chatId, setList, setUsers);
+        Api.onChatContent(data.chatId, setList, setUsers);
     }, [data.chatId]);
 
     useEffect(() => {
@@ -82,7 +81,6 @@ export default ({user, data}: Props) => {
           if (body.current.scrollHeight > body.current.offsetHeight) {
             body.current.scrollTop = body.current.scrollHeight - body.current.offsetHeight;
           }
-          console.log(body);
         }
       }, [list]);
 
@@ -115,7 +113,6 @@ export default ({user, data}: Props) => {
                         user={user}
                     />
                 ))}
-                {listening ? 'ligado' : 'desligado'} 
             </C.ChatWindowBody>
             <C.ChatWindowEmojiArea emojiopen={emojiOpen.toString()}>
                 <Picker 

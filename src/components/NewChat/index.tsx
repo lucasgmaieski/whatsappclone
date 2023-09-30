@@ -4,11 +4,10 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import Api from '../../Api';
 type Props = {
     user: UserType;
-    chatlist: ChatItemType[];
     show: boolean;
     setShow: React.Dispatch<React.SetStateAction<boolean>>
 }
-export const NewChat = ({user, chatlist, show, setShow}: Props) => {
+export const NewChat = ({user, show, setShow}: Props) => {
     const [list, setList] = useState<UserType[]>([]);
 
     useEffect(()=>{

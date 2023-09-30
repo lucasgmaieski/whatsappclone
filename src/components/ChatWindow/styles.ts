@@ -1,4 +1,3 @@
-import { MdOutlineEmojiEmotions } from "react-icons/md";
 import styled from "styled-components";
 
 export const ChatWindow = styled.div`
@@ -62,10 +61,6 @@ export const ChatWindowEmojiArea = styled.div<{emojiopen: string}>`
         background-color: transparent;
     }
 `;
-
-// export const StyledEmojiEmotions = styled(MdOutlineEmojiEmotions)<{emojiOpen : string}>`
-//     color: ${props=>props.$emojiOpen ? '#009688' :'#919191'};
-// `;
 
 export const ChatWindowBody = styled.div`
     flex: 1;

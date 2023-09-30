@@ -9,7 +9,6 @@ export const db = getFirestore(firebaseApp);
 
 export default {
     fbPopup: async () => {
-        // const provider = new firebase.auth.FacebookAuthProvider();
         const resultFull: any  = {}
         const provider = new FacebookAuthProvider();
         let result = await signInWithPopup(auth, provider);
@@ -34,7 +33,6 @@ export default {
     },
     addUser: async (u: any) => {
         if(u) {
-            console.log('ta entrando aqui -----' + u.id)
             const userDocRef = doc(db, 'users', u.id);
             const userData = { name: u.name, avatar: u.avatar};
             try {
@@ -68,8 +66,6 @@ export default {
                 }
             })
             // Agora você tem os dados dos usuários em usersData
-            console.log(usersData);
-            console.log(list);
         } catch (error) {
             console.error('Erro ao buscar usuários:', error);
         }
@@ -188,5 +184,4 @@ export default {
             }
         }
     }
-
 }
