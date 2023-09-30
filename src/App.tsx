@@ -16,11 +16,7 @@ import Api from './Api';
 function App() {
     const [chatlist, setChatlist] = useState<ChatItemType[]>([])
     const [activeChat, setActiveChat] = useState<ChatItemType | null>(null);
-    const [user, setUser] = useState<UserType | null>({
-        id: 'LrK8dEJsyVYIcnEhn17UZskr1tI2',
-        name: 'Lucas Maieski',
-        avatar: 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=6905397726190656&height=200&width=200&ext=1698276353&hash=AeTs60LGvUKLoz6yZMs'
-    });
+    const [user, setUser] = useState<UserType | null>(null);
     const [showNewChat, setShowNewChat] = useState(false);
 
     useEffect(()=> {
@@ -28,7 +24,6 @@ function App() {
             let unsub = Api.onChatList(user.id, setChatlist);
             return unsub;
         }
-        console.log(chatlist[0].lastMessageDate);
     }, [user]);
 
     const handleNewChat = () => {
